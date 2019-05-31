@@ -17,7 +17,8 @@ ENDIF()
 
 include_directories(include)
 
-FIND_PACKAGE(CUDA 6.5)
+set(CUDA_TOOLKIT_ROOT_DIR "/aifs/tools/CUDA/cuda-9.0")
+FIND_PACKAGE(CUDA)
 MESSAGE(STATUS "cuda found ${CUDA_FOUND}")
 
 option(WITH_GPU "compile warp-ctc with cuda." ${CUDA_FOUND})
@@ -38,6 +39,10 @@ IF (CUDA_VERSION GREATER 7.6)
     set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -gencode arch=compute_60,code=sm_60")
     set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -gencode arch=compute_61,code=sm_61")
     set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -gencode arch=compute_62,code=sm_62")
+ENDIF()
+
+IF (CUDA_VERSION GREATER 8.9)
+    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -gencode arch=compute_70,code=sm_70")
 ENDIF()
 
 if (NOT APPLE)
